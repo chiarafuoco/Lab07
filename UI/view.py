@@ -1,4 +1,6 @@
 import flet as ft
+from flet import MainAxisAlignment
+
 from UI.alert import AlertManager
 
 '''
@@ -35,11 +37,19 @@ class View:
         # --- Sezione 1: Intestazione ---
         self.txt_titolo = ft.Text(value="Biblioteche di Torino", size=38, weight=ft.FontWeight.BOLD)
 
-        # --- Sezione 2: Filtraggio ---
-        # TODO
+        # --- Sezione 2: Filtraggio --- #creo una casella dropdown in cui posso visualizzare le biblioteche selezionate,
+        #o nel caso rimanga di default "no filtro" visualizzo tutte le biblioteche
+        self.filtro_biblioteca = ft.Dropdown(on_select=self.controller.pulisci_lista,value="No filtro")
+        self.controller.popola_dropdown_biblioteca()
+
+        # creo una casella dropdown in cui posso visualizzare i generi selezionati,
+        # o nel caso rimanga di default "no filtro" visualizzo tutti i generi
+        self.filtro_generi = ft.Dropdown(on_select=self.controller.pulisci_lista,value="No filtro")
+        self.controller.popola_dropdown_generi()
 
         # Sezione 3: Libri
-        # TODO
+        self.lista_libri = ft.ListView(expand=True, spacing=5, padding=10, auto_scroll=True) #creo una list view in cui andrò a vedere a schermo
+        # il risultato del mio filtraggio o della mia opzione di default
 
         # --- Toggle Tema ---
         self.toggle_cambia_tema = ft.Switch(label="Tema scuro", value=True, on_change=self.cambia_tema)
@@ -53,10 +63,16 @@ class View:
             ft.Divider(),
 
             # Sezione 2: Filtraggio
-            # TODO
+            # creo una riga il cui aggiungo le dropdown, allineandola centralmente
+            ft.Row(controls=[self.filtro_biblioteca, self.filtro_generi],alignment=ft.MainAxisAlignment.CENTER),
+            ft.Divider(), #aggiungo un divisore
+            ft.Button(content="Mostra Libri",
+                        on_click = self.controller.handler_btn), #aggiungo un button che mi permette di dare il via alla visualizzazione a schermo
+            # ho richiamato infatti la funzione handler_btn dal controller, la quale una volta richimata visualizza il risultato
+
 
             # Sezione 3: Libri
-            # TODO
+            self.lista_libri
         )
 
         self.page.scroll = "adaptive"

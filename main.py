@@ -1,3 +1,5 @@
+from idlelib import multicall
+
 import flet as ft
 
 from model.model import Model
